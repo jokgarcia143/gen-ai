@@ -1,0 +1,44 @@
+{
+  "trigger": {
+    "branches": ["main"],
+    "paths": ["src/**/*"]
+  },
+  "pool": {
+    "vmImage": "ubuntu-latest"
+  },
+  "jobs": [
+    {
+      "job": "Build",
+      "displayName": "Build job",
+      "steps": [
+        {
+          "task": "UseNode@2",
+          "displayName": "Install Node.js",
+          "inputs": {
+            "versionSpec": "14.x",
+            "checkLatest": true
+          }
+        },
+        {
+          "script": "npm install",
+          "displayName": "Install dependencies"
+        },
+        {
+          "script": "npm run build",
+          "displayName": "Build"
+        }
+      ]
+    },
+    {
+      "job": "Test",
+      "displayName": "Test job",
+      "dependsOn": "Build",
+      "steps": [
+        {
+          "script": "npm test",
+          "displayName": "Run tests"
+        }
+      ]
+    }
+  ]
+}
